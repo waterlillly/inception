@@ -1,0 +1,45 @@
+# Secrets directory
+secrets/
+*.secret
+*.key
+*.crt
+*.pem
+
+# Environment files with real credentials
+.env
+*.env.local
+*.env.production
+
+# User-specific data
+/home/*/data/
+
+# Docker volumes and build cache
+.docker/
+docker-compose.override.yml
+
+# Other files
+.vscode/
+inception.pdf
+*.md
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.bak
+*.backup
