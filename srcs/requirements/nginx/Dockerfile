@@ -1,11 +1,14 @@
 FROM debian:bullseye
 
+LABEL maintainer="lbaumeis"
+
 # Update system and install nginx + openssl
-RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y nginx openssl gettext-base \
-	&& apt-get clean \
+# rm -rf line removes the cache of the package manager
+RUN apt-get update \
+    && apt-get install -y nginx openssl \
+	&& apt clean \
     && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /etc/ssl/private
+    && mkdir -p /etc/ssl/private /etc/ssl/certs
 
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 

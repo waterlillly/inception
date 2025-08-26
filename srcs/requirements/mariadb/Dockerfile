@@ -1,11 +1,13 @@
 FROM debian:bullseye
 
-RUN apt-get update && apt-get upgrade -y \
+LABEL maintainer="lbaumeis"
+
+RUN apt-get update \
     && apt-get install -y mariadb-server \
-	&& apt-get clean \
+	&& apt clean \
     && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /var/run/mysqld /var/log/mysql \
-    && chown -R mysql:mysql /var/run/mysqld /var/log/mysql /var/lib/mysql
+    && mkdir -p /var/run/mysqld \
+    && chown -R mysql:mysql /var/run/mysqld /var/lib/mysql
 
 # NOTES:
 # MariaDB specific config-file hierarchy:

@@ -7,18 +7,19 @@ set -e
 DB_PASSWORD=$(cat /run/secrets/db_password)
 DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
 
-MYSQL_DATA_DIR="/var/lib/mysql"
-INIT_SQL="/var/lib/mysql/init.sql"
-MYSQL_USER="mysql"
-
 # Validate required environment variables
 if [[ -z "${DB_NAME}" || -z "${DB_USER}" || -z "${DB_PASSWORD}" || -z "${DB_ROOT_PASSWORD}" ]]; then
     echo "Error: Missing required environment variables"
     exit 1
 fi
 
+# Initialize MariaDB database if not already initialized
+if [ ! -d "${MYSQL_DATA_DIR}/mysql" ]; then
+	mysql_install_db --user="${MYSQL_USER}" --datadir="${MYSQL_DATA_DIR}" --skip-test-db
+fi
+
 # Create init.sql file with proper security
-cat > "${INIT_SQL}" <<EOF
+cat > "${MYSQL_DATA_DIR}/init.sql" <<EOF
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
@@ -32,10 +33,5 @@ GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
 FLUSH PRIVILEGES;
 EOF
 
-# Initialize MariaDB database if not already initialized
-if [ ! -d "${MYSQL_DATA_DIR}/mysql" ]; then
-	mysql_install_db --user="${MYSQL_USER}" --datadir="${MYSQL_DATA_DIR}" --skip-test-db
-fi
-
 # Start MySQL server with init file
-exec mysqld --user="${MYSQL_USER}" --init-file="${INIT_SQL}"
+exec mysqld --user="${MYSQL_USER}" --init-file="${MYSQL_DATA_DIR}/init.sql"

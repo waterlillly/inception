@@ -1,5 +1,4 @@
-COMPOSE = docker compose -f ./srcs/docker-compose.yml --env-file ./srcs/.env
-DATA_DIR = /home/$(USER)/data
+COMPOSE = docker compose -f ./srcs/docker-compose.yml
 
 GREEN = \033[0;32m
 BLUE = \033[0;34m
@@ -9,10 +8,10 @@ NC = \033[0m
 all: up
 
 up: 
-	mkdir -p $(DATA_DIR)/wordpress
-	mkdir -p $(DATA_DIR)/mariadb
+	mkdir -p ~/data/wordpress
+	mkdir -p ~/data/mariadb
 	$(COMPOSE) up -d --build
-	@echo "$(GREEN)Project is running! Go to https://$(shell grep DOMAIN_NAME srcs/.env | cut -d'=' -f2)$(NC)"
+	@echo "$(GREEN)All containers are up and running!$(NC)"
 
 down:
 	@echo "$(MAGENTA)Stopping containers...$(NC)"
@@ -21,7 +20,7 @@ down:
 clean:
 	@echo "$(MAGENTA)Cleaning up containers and volumes...$(NC)"
 	$(COMPOSE) down -v
-	sudo rm -rf $(DATA_DIR)
+	sudo rm -rf ~/data
 
 fclean: clean
 	@echo "$(BLUE)Complete cleanup - removing all Docker data...$(NC)"
