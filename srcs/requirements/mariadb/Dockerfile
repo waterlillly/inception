@@ -1,11 +1,14 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 LABEL maintainer="lbaumeis"
 
+# rm -rf /var/lib/apt/lists/* -> removes package list indexes
+# apt-get clean -> removes cached .deb files.
 RUN apt-get update \
-    && apt-get install -y mariadb-server \
-	&& apt clean \
+    && apt-get install -y --no-install-recommends \
+	mariadb-server \
     && rm -rf /var/lib/apt/lists/* \
+	&& apt-get clean \
     && mkdir -p /var/run/mysqld \
     && chown -R mysql:mysql /var/run/mysqld /var/lib/mysql
 
@@ -26,8 +29,6 @@ COPY ./conf/mariadb.conf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY ./tools/mariadb.sh .
 
 RUN chmod +x ./mariadb.sh
-
-USER mysql
 
 EXPOSE 3306
 

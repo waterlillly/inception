@@ -1,3 +1,12 @@
+# build -> building a custom image instead of pulling one with "image"
+# container_name -> use custom name for container
+# secrets -> manage sensitive data (e.g., passwords) separately from the code
+# ports -> map container ports to host ports
+# env_file -> specify environment variables in a file, instead of inline
+# volumes -> mount host paths or named volumes into the container at the specified path
+# depends_on -> specify dependencies between services to control startup order
+# restart -> (here:) always restart the container unless it is explicitly stopped
+# networks -> define custom networks for inter-container communication (by default all services inside a compose file are in the same network)
 
 services:
   nginx:
@@ -19,7 +28,7 @@ services:
     build: ./requirements/wordpress
     container_name: wordpress
     secrets:
-      - db_password
+      - db_user_password
       - wp_admin_password
       - wp_user_password
     env_file:
@@ -36,7 +45,7 @@ services:
     build: ./requirements/mariadb
     container_name: mariadb
     secrets:
-      - db_password
+      - db_user_password
       - db_root_password
     env_file:
       - ./.env
@@ -47,8 +56,8 @@ services:
       - inception
 
 secrets:
-  db_password:
-    file: ./../secrets/db_password.txt
+  db_user_password:
+    file: ./../secrets/db_user_password.txt
   db_root_password:
     file: ./../secrets/db_root_password.txt
   wp_admin_password:
@@ -56,17 +65,30 @@ secrets:
   wp_user_password:
     file: ./../secrets/wp_user_password.txt
 
+# Volumes to persist data and configuration outside of the container lifecycle
+# name -> override the auto-name of the volume, by default: <project_name>_<volume_name>
+# driver -> volume driver to use (default is local -> stores volume data on host)
+#           other options: nfs, azurefile, flocker, gcs -> used for shared storage (swarm) or external persistance
+# driver_opts -> specific options passed to the driver
+#               common for local driver:
+#                 type: none -> what filesystem/device type is used (none, nfs -> for remote shared storage, tmpfs -> in-memory, data only lives in RAM, fast but ephemeral storage)
+#                 o: bind -> bind-mount an existing path (rw/ro = read-write/read-only, uid=<uid>,gid=<gid> = set ownership)
+#                 device: <host_path> -> the actual path to mount
+
+# if the path exists and is writeable:
 volumes:
   wordpress_data:
+    driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/${USER}/data/wordpress
+      device: /home/${LOGIN}/data/wordpress
   mariadb_data:
+    driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/${USER}/data/mariadb
+      device: /home/${LOGIN}/data/mariadb
 
 networks:
   inception:

@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bookworm
 
 LABEL maintainer="lbaumeis"
 
@@ -14,8 +14,11 @@ LABEL maintainer="lbaumeis"
 # - wget: Alternative download utility
 # - tar: Archive extraction for WordPress files
 # - mariadb-client: MySQL/MariaDB client for database access
+# - ca-certificates: SSL/TLS certificates for HTTPS downloads
+# rm -rf /var/lib/apt/lists/* -> removes package list indexes
+# apt-get clean -> removes cached .deb files.
 RUN apt-get update \
-    && apt-get install -y \
+    && apt-get install -y --no-install-recommends \
 	php \
 	php-fpm \
 	php-mysql \
@@ -27,22 +30,15 @@ RUN apt-get update \
 	wget \
 	tar \
 	mariadb-client \
-	&& apt clean \
-    && rm -rf /var/lib/apt/lists/*
-    
-RUN mkdir -p /var/www/html \
-    && mkdir -p /var/run/php/ \
+	sendmail \
+	ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+	&& apt-get clean \
+    && mkdir -p /var/www/html /var/run/php/ \
     && chown -R www-data:www-data /var/run/php/ /var/www/html
 
-# Set working directory and ensure proper ownership
-# WORKDIR /var/www/html
-# RUN chown -R www-data:www-data /var/www/html
-    # && mkdir -p /var/log \
-    # && touch /var/log/php-fpm.log \
-    # && chown www-data:www-data /var/log/php-fpm.log
-
 # Install WP-CLI for WordPress management
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+RUN curl -L --fail --retry 3 --retry-connrefused -o wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
