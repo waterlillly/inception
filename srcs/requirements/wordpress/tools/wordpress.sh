@@ -23,6 +23,9 @@ WP_USER_PASS="$(cat /run/secrets/wp_user_password)"
 : "${WP_USER_EMAIL:?[ERROR] WP_USER_EMAIL not set}"
 : "${WP_USER_PASS:?[ERROR] WP_USER_PASS not set}"
 
+# Set working directory to WordPress root
+cd /var/www/html
+
 # Check if WordPress is already downloaded
 # -f checks if the file exists (checking for index.php which is part of WordPress core)
 if [[ ! -f "index.php" ]]; then

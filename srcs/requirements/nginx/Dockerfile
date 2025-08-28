@@ -2,15 +2,15 @@ FROM debian:bookworm
 
 LABEL maintainer="lbaumeis"
 
-# Update system and install nginx + openssl
-# rm -rf /var/lib/apt/lists/* -> removes package list indexes
-# apt-get clean -> removes cached .deb files.
+# Optimize package installation for smaller image size
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-	nginx \
-	openssl \
+        nginx \
+        openssl \
+    && apt-get autoremove -y \
+    && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* \
-	&& apt-get clean \
+    && rm -rf /var/cache/apt/archives/* \
     && mkdir -p /etc/ssl/private /etc/ssl/certs \
     && chown root:root /etc/ssl/private /etc/ssl/certs \
     && chmod 700 /etc/ssl/private \
@@ -18,7 +18,7 @@ RUN apt-get update \
 
 COPY ./conf/nginx.conf /etc/nginx/nginx.conf
 
-COPY /tools/nginx.sh .
+COPY ./tools/nginx.sh .
 
 RUN chmod +x nginx.sh
 

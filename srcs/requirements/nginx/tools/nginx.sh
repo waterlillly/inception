@@ -29,11 +29,11 @@ openssl req \
 
 # Substitute environment variables in nginx config
 # sed -i -> edit file in-place
-# Substitute all occurences of DOMAIN_NAME with the value of $DOMAIN_NAME (env-variable)
+# Substitute all occurences of placeholders with environment variable values
 # /g -> all occurences in each line
-sed -i "s/DOMAIN_NAME/"${DOMAIN_NAME}"/g" /etc/nginx/nginx.conf || { echo "[ERROR] Failed to substitute DOMAIN_NAME"; exit 1; }
-sed -i "s|\${SSL_CERT_FILE}|"${SSL_CERT_FILE}"|g" /etc/nginx/nginx.conf || { echo "[ERROR] Failed to substitute SSL_CERT_FILE"; exit 1; }
-sed -i "s|\${SSL_KEY_FILE}|"${SSL_KEY_FILE}"|g" /etc/nginx/nginx.conf || { echo "[ERROR] Failed to substitute SSL_KEY_FILE"; exit 1; }
+sed -i "s|DOMAIN_NAME|${DOMAIN_NAME}|g" /etc/nginx/nginx.conf || { echo "[ERROR] Failed to substitute DOMAIN_NAME"; exit 1; }
+sed -i "s|SSL_CERT_FILE|${SSL_CERT_FILE}|g" /etc/nginx/nginx.conf || { echo "[ERROR] Failed to substitute SSL_CERT_FILE"; exit 1; }
+sed -i "s|SSL_KEY_FILE|${SSL_KEY_FILE}|g" /etc/nginx/nginx.conf || { echo "[ERROR] Failed to substitute SSL_KEY_FILE"; exit 1; }
 
 # Start nginx
 # -g allows passing nginx config directives

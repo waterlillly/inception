@@ -2,13 +2,14 @@ FROM debian:bookworm
 
 LABEL maintainer="lbaumeis"
 
-# rm -rf /var/lib/apt/lists/* -> removes package list indexes
-# apt-get clean -> removes cached .deb files.
+# optimize package installation to keep the image small
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-	mariadb-server \
+        mariadb-server \
+    && apt-get autoremove -y \
+    && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* \
-	&& apt-get clean \
+    && rm -rf /var/cache/apt/archives/* \
     && mkdir -p /var/run/mysqld \
     && chown -R mysql:mysql /var/run/mysqld /var/lib/mysql
 
