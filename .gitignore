@@ -1,5 +1,5 @@
 # Secrets (just files, keeps directory) 
-secrets/*.txt
+secrets/*
 *.secret
 *.key
 *.crt
