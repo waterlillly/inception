@@ -6,7 +6,13 @@
 # volumes -> mount host paths or named volumes into the container at the specified path
 # depends_on -> specify dependencies between services to control startup order
 # restart -> (here:) always restart the container unless it is explicitly stopped
-# networks -> define custom networks for inter-container communication (by default all services inside a compose file are in the same network)
+# networks -> define custom networks for inter-container communication
+#             (by default all services inside a compose file are in the same network)
+#     -> driver: how containers connect to each other
+#           => bridge: default for standalone containers on a single host
+#               -> creates virtual internal network on host machine
+#               -> every container in that network gets private IP address from network
+#               -> NAT (Network Address Translation) is set up by docker so containers can reach internet through host
 
 services:
   nginx:
@@ -69,16 +75,15 @@ services:
 
 secrets:
   db_user_password:
-    file: ./../secrets/db_user_password.txt
+    file: ./../secrets/db_user_password
   db_root_password:
-    file: ./../secrets/db_root_password.txt
+    file: ./../secrets/db_root_password
   wp_admin_password:
-    file: ./../secrets/wp_admin_password.txt
+    file: ./../secrets/wp_admin_password
   wp_user_password:
-    file: ./../secrets/wp_user_password.txt
+    file: ./../secrets/wp_user_password
 
 # Volumes to persist data and configuration outside of the container lifecycle
-# name -> override the auto-name of the volume, by default: <project_name>_<volume_name>
 # driver -> volume driver to use (default is local -> stores volume data on host)
 #           other options: nfs, azurefile, flocker, gcs -> used for shared storage (swarm) or external persistance
 # driver_opts -> specific options passed to the driver

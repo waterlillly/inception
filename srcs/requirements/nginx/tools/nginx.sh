@@ -4,7 +4,7 @@
 # although mostly already handled by me (error logs and exiting)
 set -e
 
-# Validate required variables
+# Validate required variables (otherwise exit)
 : "${DOMAIN_NAME:?[ERROR] DOMAIN_NAME not set}"
 : "${SSL_CERT_FILE:?[ERROR] SSL_CERT_FILE not set}"
 : "${SSL_KEY_FILE:?[ERROR] SSL_KEY_FILE not set}"

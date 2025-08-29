@@ -23,6 +23,7 @@ if [ ! -d "${DB_DATA_DIR}/mysql" ]; then
 fi
 
 # Create init.sql
+#TODO: research more
 cat > "${DB_DATA_DIR}/init.sql" <<EOF
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASS}';
 DELETE FROM mysql.user WHERE User='';

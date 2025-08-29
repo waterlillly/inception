@@ -1,5 +1,5 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
-DC = docker compose -f $(COMPOSE_FILE)
+DC = docker-compose -f $(COMPOSE_FILE)
 ADD_HOST = 127.0.0.1 lbaumeis.42.fr
 
 # detached, full build
@@ -8,7 +8,7 @@ all: prep build
 
 # create volumes and add host to /etc/hosts if not present
 prep:
-	@if [ "$(USER)" = "lilly" -o "$(USER)" = "lbaumeis" ]; then \
+	@if [ "$(USER)" = "lbaumeis" ]; then \
 		mkdir -p /home/$(USER)/data/wordpress /home/$(USER)/data/mariadb; \
 	fi
 	@if ! grep -q "127.0.0.1[[:space:]]lbaumeis.42.fr" /etc/hosts; then \
@@ -73,20 +73,22 @@ images:
 clean:
 	$(DC) down -v
 
-# clean up unused docker resources (systemwide)
+# clean up unused docker resources
 prune:
 	docker system prune -af
 
 # wipes all Docker resources on the machine (containers, images, volumes, networks)
 fclean: clean
-	@if [ "$(USER)" = "lilly" -o "$(USER)" = "lbaumeis" ]; then \
+	@if [ "$(USER)" = "lbaumeis" ]; then \
 		sudo rm -rf /home/$(USER)/data/wordpress /home/$(USER)/data/mariadb; \
 	fi
 	docker system prune -af --volumes
 
 re: fclean all
 
-.PHONY: all prep build rebuild up up-d down start stop restart ps logs logs-n logs-m logs-w images clean prune fclean re
+re-d: fclean prep build up-d
+
+.PHONY: all prep build rebuild up up-d down start stop restart ps logs logs-n logs-m logs-w images clean prune fclean re re-d
 
 # prune overview
 # docker system prune: removes unused data (stopped containers, unused networks, dangling images and build cache)

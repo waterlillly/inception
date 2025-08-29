@@ -22,12 +22,16 @@
 <!-- - what is buildkit??? -->
 <!-- - change LOGIN back to lbaumeis -->
 - should .gitignore and .dockerignore be pushed to/ shown on github??
-- 'todo' only works on files not part of an ignore file!
-- TODO: uncomment .md in gitignore file for eval
-- TODO: delete stuff inside .gitkeep file
-- check how secrets get created (which extension-> also .txt or .pem/.secret etc?)
+- uncomment .md in gitignore file for eval
+- delete stuff inside .gitkeep file
 - add .gitignore to .gitignore and .dockerignore to .dockerignore??
 - create .README (push to github but then add to .gitignore for eval!)
+- docker network ls -> bridge, host, inception_inception, none => why 4?
+- docker-compose || docker compose
+- add exec
+- add theme to wordpress to enable comments
+- how to login to mariadb + verify its not empty
+- check if deleting data dir on host is actually valid!
 ___________________________________________________________________________________________________
 
 # DICTIONARY
