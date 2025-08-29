@@ -24,6 +24,8 @@
 - should .gitignore and .dockerignore be pushed to/ shown on github??
 - 'todo' only works on files not part of an ignore file!
 - TODO: uncomment .md in gitignore file for eval
+- TODO: delete stuff inside .gitkeep file
+- check how secrets get created (which extension-> also .txt or .pem/.secret etc?)
 ___________________________________________________________________________________________________
 
 # DICTIONARY
