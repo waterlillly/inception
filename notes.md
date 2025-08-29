@@ -27,6 +27,7 @@
 - TODO: delete stuff inside .gitkeep file
 - check how secrets get created (which extension-> also .txt or .pem/.secret etc?)
 - add .gitignore to .gitignore and .dockerignore to .dockerignore??
+- create .README (push to github but then add to .gitignore for eval!)
 ___________________________________________________________________________________________________
 
 # DICTIONARY
