@@ -1,19 +1,19 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
 DC = docker compose -f $(COMPOSE_FILE)
-# ADD_HOST = 127.0.0.1 lbaumeis.42.fr TODO: change back!
+ADD_HOST = 127.0.0.1 lbaumeis.42.fr
 
 # detached, full build
 all: prep build
 	$(DC) up -d
 
-# create volumes and add host to /etc/hosts if not present TODO: change back!
+# create volumes and add host to /etc/hosts if not present
 prep:
 	@if [ "$(USER)" = "lilly" -o "$(USER)" = "lbaumeis" ]; then \
 		mkdir -p /home/$(USER)/data/wordpress /home/$(USER)/data/mariadb; \
 	fi
-# 	@if ! grep -q "127.0.0.1[[:space:]]lbaumeis.42.fr" /etc/hosts; then \
-# 		sudo sh -c 'echo "$(ADD_HOST)" >> /etc/hosts'; \
-# 	fi
+	@if ! grep -q "127.0.0.1[[:space:]]lbaumeis.42.fr" /etc/hosts; then \
+		sudo sh -c 'echo "$(ADD_HOST)" >> /etc/hosts'; \
+	fi
 
 # create or refresh images
 build:

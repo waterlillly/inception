@@ -1,5 +1,5 @@
-# Secrets directory
-secrets/
+# Secrets (just files, keeps directory) 
+secrets/*.txt
 *.secret
 *.key
 *.crt
@@ -20,7 +20,7 @@ docker-compose.override.yml
 # Other files
 .vscode/
 inception.pdf
-*.md
+# *.md
 .idea/
 *.swp
 *.swo
