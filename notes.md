@@ -26,6 +26,7 @@
 - TODO: uncomment .md in gitignore file for eval
 - TODO: delete stuff inside .gitkeep file
 - check how secrets get created (which extension-> also .txt or .pem/.secret etc?)
+- add .gitignore to .gitignore and .dockerignore to .dockerignore??
 ___________________________________________________________________________________________________
 
 # DICTIONARY
