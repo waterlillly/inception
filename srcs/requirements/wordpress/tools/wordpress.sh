@@ -65,6 +65,7 @@ install_wordpress() {
 		--admin_user="${WP_ADMIN_USER}" \
 		--admin_password="${WP_ADMIN_PASS}" \
 		--admin_email="${WP_ADMIN_EMAIL}" \
+		--theme="twentytwentythree" --activate \
 		--allow-root || { echo "[ERROR] WordPress installation failed"; return 1; }
 	create_user || return 1
 }

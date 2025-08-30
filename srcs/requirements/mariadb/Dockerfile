@@ -6,10 +6,8 @@ LABEL maintainer="lbaumeis"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         mariadb-server \
-    && apt-get autoremove -y \
-    && apt-get autoclean \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /var/cache/apt/archives/* \
     && mkdir -p /var/run/mysqld \
     && chown -R mysql:mysql /var/run/mysqld /var/lib/mysql
 

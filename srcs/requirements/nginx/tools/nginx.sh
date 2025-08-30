@@ -25,7 +25,7 @@ openssl req \
     -days 365 \
     -keyout "${SSL_KEY_FILE}" \
     -out "${SSL_CERT_FILE}" \
-    -subj "/C=AT/ST=Austria/L=Vienna/O=42Vienna/OU=student/CN=${LOGIN}" || { echo "[ERROR] Failed to generate SSL certificate"; exit 1; }
+    -subj "/C=AT/ST=Austria/L=Vienna/O=42Vienna/OU=student/CN=${DOMAIN_NAME}" || { echo "[ERROR] Failed to generate SSL certificate"; exit 1; }
 
 # Substitute environment variables in nginx config
 # sed -i -> edit file in-place
@@ -35,7 +35,7 @@ sed -i "s|DOMAIN_NAME|${DOMAIN_NAME}|g" /etc/nginx/nginx.conf || { echo "[ERROR]
 sed -i "s|SSL_CERT_FILE|${SSL_CERT_FILE}|g" /etc/nginx/nginx.conf || { echo "[ERROR] Failed to substitute SSL_CERT_FILE"; exit 1; }
 sed -i "s|SSL_KEY_FILE|${SSL_KEY_FILE}|g" /etc/nginx/nginx.conf || { echo "[ERROR] Failed to substitute SSL_KEY_FILE"; exit 1; }
 
-# Start nginx
+# Start nginx in foreground (daemon off) so it stays PID 1 for proper signal handling
 # -g allows passing nginx config directives
 # "daemon off" starts in foreground (would exit otherwise after starting)
 echo "[INFO] Starting nginx.."

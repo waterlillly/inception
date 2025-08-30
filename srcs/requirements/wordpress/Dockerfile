@@ -2,6 +2,7 @@ FROM debian:bookworm
 
 LABEL maintainer="lbaumeis"
 
+# side note: php8.2-fpm = package name, php-fpm8.2 = service/binary name
 # Install PHP, extensions, and tools:
 # - php: PHP core interpreter
 # - php-fpm: FastCGI Process Manager for nginx integration
@@ -14,28 +15,25 @@ LABEL maintainer="lbaumeis"
 # - tar: Archive extraction for WordPress files
 # - mariadb-client: MySQL/MariaDB client for database access
 # - ca-certificates: SSL/TLS certificates for HTTPS downloads
-# apt-get autoremove -y -> removes unused packages
-# apt-get autoclean -y -> removes cached .deb files
+# apt-get clean -> removes cached .deb files
 # rm -rf /var/lib/apt/lists/* -> removes package list indexes
-# rm -rf /var/cache/apt/archives/* -> removes cached .deb files
-
+# mkdir -p [...] -> creates necessary directories
+# chown -R [...] -> changes ownership of files/directories to www-data (user under which PHP-FPM runs)
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        php \
-        php-fpm \
-        php-mysql \
-        php-gd \
-        php-xml \
-        php-curl \
-        php-zip \
+        php8.2 \
+        php8.2-fpm \
+        php8.2-mysql \
+        php8.2-gd \
+        php8.2-xml \
+        php8.2-curl \
+        php8.2-zip \
         curl \
         tar \
         mariadb-client \
         ca-certificates \
-    && apt-get autoremove -y \
-    && apt-get autoclean \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /var/cache/apt/archives/* \
     && mkdir -p /var/www/html /var/run/php/ /var/log/php-fpm \
     && chown -R www-data:www-data /var/run/php/ /var/www/html /var/log/php-fpm
 

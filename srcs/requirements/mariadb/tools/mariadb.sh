@@ -19,7 +19,7 @@ DB_ROOT_PASS="$(cat /run/secrets/db_root_password)"
 # -d checks if a directory exists at the specified path
 if [ ! -d "${DB_DATA_DIR}/mysql" ]; then
     echo "[INFO] Initializing MariaDB data directory.."
-	mariadb_install_db --user=mysql --datadir="${DB_DATA_DIR}" --skip-test-db || { echo "[ERROR] MariaDB installation failed"; exit 1; }
+	mariadb-install-db --user=mysql --datadir="${DB_DATA_DIR}" --skip-test-db || { echo "[ERROR] MariaDB installation failed"; exit 1; }
 fi
 
 # Create init.sql
@@ -38,6 +38,6 @@ GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
 FLUSH PRIVILEGES;
 EOF
 
-# Start MariaDB (by default in foreground)
+# Start MariaDB server (by default in foreground)
 echo "[INFO] Starting MariaDB.."
 exec mariadbd --user=mysql --datadir="${DB_DATA_DIR}" --init-file="${DB_DATA_DIR}/init.sql"

@@ -7,10 +7,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         nginx \
         openssl \
-    && apt-get autoremove -y \
-    && apt-get autoclean \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /var/cache/apt/archives/* \
     && mkdir -p /etc/ssl/private /etc/ssl/certs \
     && chown root:root /etc/ssl/private /etc/ssl/certs \
     && chmod 700 /etc/ssl/private \
@@ -24,4 +22,6 @@ RUN chmod +x nginx.sh
 
 EXPOSE 443
 
+# ENTRYPOINT defines the executable that always runs (can't be overridden)
+# CMD would provide default arguments to the ENTRYPOINT, or run standalone if no ENTRYPOINT
 ENTRYPOINT ["./nginx.sh"]

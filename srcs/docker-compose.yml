@@ -14,10 +14,14 @@
 #               -> every container in that network gets private IP address from network
 #               -> NAT (Network Address Translation) is set up by docker so containers can reach internet through host
 
+# image: <image_name> without defining 'build' would pull <image_name> from Docker Hub
+# with 'build' it will build the image from the specified Dockerfile and will give the specified name
+# -> image name == service name (as the subject wants us to do)
 services:
   nginx:
+    image: nginx
     build: ./requirements/nginx
-    container_name: nginx
+    # container_name: nginx
     ports:
       - "443:443"
     env_file:
@@ -32,8 +36,9 @@ services:
       - inception
 
   wordpress:
+    image: wordpress
     build: ./requirements/wordpress
-    container_name: wordpress
+    # container_name: wordpress
     secrets:
       - db_user_password
       - wp_admin_password
@@ -46,17 +51,19 @@ services:
       mariadb:
         condition: service_healthy
     healthcheck:
+    # php-fpm8.2 -t -> tests if php-fpm is properly configured and running
       test: ["CMD-SHELL", "php-fpm8.2 -t"]
-      interval: 20s
-      timeout: 10s
+      interval: 30s
+      timeout: 20s
       retries: 3
     restart: unless-stopped
     networks:
       - inception
 
   mariadb:
+    image: mariadb
     build: ./requirements/mariadb
-    container_name: mariadb
+    # container_name: mariadb
     secrets:
       - db_user_password
       - db_root_password
@@ -65,9 +72,11 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     healthcheck:
+    # test -> runs a command inside the container to check if it's healthy
+    # mysqladmin (= client utility) "pings" the running database to check if it's up
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$(cat /run/secrets/db_root_password)"]
-      interval: 20s
-      timeout: 10s
+      interval: 30s
+      timeout: 20s
       retries: 3
     restart: unless-stopped
     networks:

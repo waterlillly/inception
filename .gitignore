@@ -1,12 +1,14 @@
-# Secrets (just files, keeps directory) 
+# Secrets (just files, keeps directory)
 secrets/*
+!secrets/.gitkeep
 *.secret
 *.key
 *.crt
 *.pem
 
 # Environment files with real credentials
-.env
+srcs/.env
+*.env
 *.env.local
 *.env.production
 
@@ -21,6 +23,7 @@ docker-compose.override.yml
 .vscode/
 inception.pdf
 # *.md
+README.md
 .idea/
 *.swp
 *.swo

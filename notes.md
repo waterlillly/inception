@@ -26,12 +26,16 @@
 - delete stuff inside .gitkeep file
 - add .gitignore to .gitignore and .dockerignore to .dockerignore??
 - create .README (push to github but then add to .gitignore for eval!)
-- docker network ls -> bridge, host, inception_inception, none => why 4?
-- docker-compose || docker compose
 - add exec
 - add theme to wordpress to enable comments
 - how to login to mariadb + verify its not empty
-- check if deleting data dir on host is actually valid!
+<!-- - check if deleting data dir on host is actually valid! -->
+- install docker-compose-plugin (for docker compose)
+	-> sudo apt-get update && sudo apt-get install -y docker-compose-plugin
+___________________________________________________________________________________________________
+
+# QUESTIONS
+1. allowed to use secrets or only .env?
 ___________________________________________________________________________________________________
 
 # DICTIONARY
@@ -359,17 +363,18 @@ ________________________________________________________________________________
 	in background (e.g, 'nginx & bash').
 	Examine all the scripts in the repository. Ensure none of them runs an infinite loop. The following are a few examples of prohibited commands: 'sleep infinity', 'tail -f /dev/null', 'tail -f /dev/random'
 	Run the Makefile.
-	Mandatory part
+
+## Mandatory part
 	This project consists in setting up a small infrastructure composed of different services using docker compose. Ensure that all the following points are correct.
 
 ## Project overview
 	The evaluated person has to explain to you in simple terms:
-	How Docker and docker compose work
-	The difference between a Docker image used with docker compose and without docker compose
-	The benefit of Docker compared to VMs
-	The pertinence of the directory structure required for this project (an example is provided in the subject's PDF file).
-	Simple setup
+	- How Docker and docker compose work
+	- The difference between a Docker image used with docker compose and without docker compose
+	- The benefit of Docker compared to VMs
+	- The pertinence of the directory structure required for this project (an example is provided in the subject's PDF file).
 
+## Simple setup
 	Ensure that NGINX can be accessed by port 443 only. Once done, open the page.
 	Ensure that a SSL/TLS certificate is used.
 	Ensure that the WordPress website is properly installed and configured (you shouldn't see the WordPress Installation page). To access it, open https://login.42.fr in your browser, where login is the login of the evaluated student. You shouldn't be able to access the site via
@@ -411,10 +416,9 @@ ________________________________________________________________________________
 
 ## Persistence!
 	This part is pretty straightforward. You have to reboot the virtual machine. Once it has restarted, launch docker compose again. Then, verify that everything is functional, and that both WordPress and MariaDB are configured. The changes you made previously to the WordPress website should still be here. If any of the above points is not correct, the evaluation process ends now.
-	Bonus
-	Evaluate the bonus part if, and only if, the mandatory part has been entirely and perfectly done, and the error management handles unexpected or bad usage. In case all the mandatory points were not passed during the defense, bonus points must be totally ignored.
 
 ## Bonus
+	Evaluate the bonus part if, and only if, the mandatory part has been entirely and perfectly done, and the error management handles unexpected or bad usage. In case all the mandatory points were not passed during the defense, bonus points must be totally ignored.
 	Add 1 point per bonus authorized in the subject.
 	Verify and test the proper functioning and implementation of each extra
 	service.

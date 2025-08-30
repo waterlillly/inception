@@ -1,6 +1,8 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
-DC = docker-compose -f $(COMPOSE_FILE)
-ADD_HOST = 127.0.0.1 lbaumeis.42.fr
+DC = docker compose -f $(COMPOSE_FILE)
+
+# Use LOGIN from srcs/.env at runtime for host data folders
+LOGIN := $(shell grep -E '^LOGIN=' srcs/.env 2>/dev/null | cut -d'=' -f2)
 
 # detached, full build
 all: prep build
@@ -8,12 +10,7 @@ all: prep build
 
 # create volumes and add host to /etc/hosts if not present
 prep:
-	@if [ "$(USER)" = "lbaumeis" ]; then \
-		mkdir -p /home/$(USER)/data/wordpress /home/$(USER)/data/mariadb; \
-	fi
-	@if ! grep -q "127.0.0.1[[:space:]]lbaumeis.42.fr" /etc/hosts; then \
-		sudo sh -c 'echo "$(ADD_HOST)" >> /etc/hosts'; \
-	fi
+	@mkdir -p /home/$(LOGIN)/data/wordpress /home/$(LOGIN)/data/mariadb
 
 # create or refresh images
 build:
@@ -34,6 +31,9 @@ up-d: prep
 down:
 	$(DC) down
 
+# exec:
+# 	$(DC) exec
+
 # stop containers, data safe
 stop:
 	$(DC) stop
@@ -41,10 +41,6 @@ stop:
 # start stopped containers again
 start:
 	$(DC) start
-
-# quickly restart containers (eg. after config change) 
-restart:
-	$(DC) restart
 
 ps:
 	$(DC) ps
@@ -73,26 +69,27 @@ images:
 clean:
 	$(DC) down -v
 
-# clean up unused docker resources
-prune:
-	docker system prune -af
-
-# wipes all Docker resources on the machine (containers, images, volumes, networks)
-fclean: clean
-	@if [ "$(USER)" = "lbaumeis" ]; then \
-		sudo rm -rf /home/$(USER)/data/wordpress /home/$(USER)/data/mariadb; \
-	fi
-	docker system prune -af --volumes
-
-re: fclean all
-
-re-d: fclean prep build up-d
-
-.PHONY: all prep build rebuild up up-d down start stop restart ps logs logs-n logs-m logs-w images clean prune fclean re re-d
-
 # prune overview
 # docker system prune: removes unused data (stopped containers, unused networks, dangling images and build cache)
 # flags:
 # -a, --all: removes all unused images not just dangling ones
 # -f, --force: skip confirmation
 # --volumes: removes unused volumes
+prune:
+	docker system prune -af
+
+# wipes all Docker resources on the machine (containers, images, volumes, networks)
+# "|| true" -> ensures the Makefile doesnt stop if rm fails (e.g. if the path doesnt exist)
+fclean: clean
+	@read -p "Are you sure? [y/N]: " confirm && \
+    if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
+		@rm -rf /home/$(LOGIN)/data/wordpress /home/$(LOGIN)/data/mariadb || true; \
+		docker system prune -af --volumes; \
+	else \
+		echo "Cancelled"; \
+		exit 1; \
+	fi
+
+re: fclean all
+
+.PHONY: all prep build rebuild up up-d down start stop ps logs logs-n logs-m logs-w images clean prune fclean re
