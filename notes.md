@@ -417,19 +417,19 @@ ________________________________________________________________________________
 	Ensure that there is a Dockerfile.
 	Ensure that there is no NGINX in the Dockerfile.
 	Using the 'docker compose ps' command, ensure that the container was created (using the flag '-p' is authorized if necessary).
-	Ensure that there is a Volume. To do so: Run the command 'docker volume ls' then 'docker volume inspect <volume name>'. Verify that the result in the standard output contains the path '/home/login/data/', where login is the login of the evaluated student.
-	The evaluated student must be able to explain you how to login into the database. Verify that the database is not empty. If any of the above points is not correct, the evaluation process ends now.
+	Ensure that there is a Volume.
+	To do so: Run the command 'docker volume ls' then 'docker volume inspect <volume name>'.
+	Verify that the result in the standard output contains the path '/home/login/data/', where login is the login of the evaluated student.
+	TODO: The evaluated student must be able to explain you how to login into the database.
+	Verify that the database is not empty.
+	If any of the above points is not correct, the evaluation process ends now.
 
 ## Persistence!
-	This part is pretty straightforward. You have to reboot the virtual machine. Once it has restarted, launch docker compose again. Then, verify that everything is functional, and that both WordPress and MariaDB are configured. The changes you made previously to the WordPress website should still be here. If any of the above points is not correct, the evaluation process ends now.
-
-## Bonus
-	Evaluate the bonus part if, and only if, the mandatory part has been entirely and perfectly done, and the error management handles unexpected or bad usage. In case all the mandatory points were not passed during the defense, bonus points must be totally ignored.
-	Add 1 point per bonus authorized in the subject.
-	Verify and test the proper functioning and implementation of each extra
-	service.
-	For the free choice service, the evaluated student has to give you a
-	simple explanation about how it works and why they think it is useful.
+	This part is pretty straightforward.
+	You have to reboot the virtual machine.
+	Once it has restarted, launch docker compose again.
+	Then, verify that everything is functional, and that both WordPress and MariaDB are configured. The changes you made previously to the WordPress website should still be here.
+	If any of the above points is not correct, the evaluation process ends now.
 
 ___________________________________________________________________________________________________
 
