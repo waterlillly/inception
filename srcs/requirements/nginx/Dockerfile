@@ -1,8 +1,7 @@
 FROM debian:bookworm
 
-LABEL maintainer="lbaumeis"
+LABEL author="lbaumeis"
 
-# Optimize package installation for smaller image size
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         nginx \
@@ -22,6 +21,6 @@ RUN chmod +x nginx.sh
 
 EXPOSE 443
 
-# ENTRYPOINT defines the executable that always runs (can't be overridden)
-# CMD would provide default arguments to the ENTRYPOINT, or run standalone if no ENTRYPOINT
+# ENTRYPOINT defines the executable that runs (can't be overridden)
+# CMD would provide default arguments to ENTRYPOINT, or run standalone if no ENTRYPOINT
 ENTRYPOINT ["./nginx.sh"]

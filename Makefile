@@ -1,95 +1,91 @@
 COMPOSE_FILE = ./srcs/docker-compose.yml
 DC = docker compose -f $(COMPOSE_FILE)
-
-# Use LOGIN from srcs/.env at runtime for host data folders
 LOGIN := $(shell grep -E '^LOGIN=' srcs/.env 2>/dev/null | cut -d'=' -f2)
 
-# detached, full build
-all: prep build
-	$(DC) up -d
+# BASICS
+all: prep build up					# prepare volumes, build images, start containers
 
-# create volumes and add host to /etc/hosts if not present
-prep:
-	@mkdir -p /home/$(LOGIN)/data/wordpress /home/$(LOGIN)/data/mariadb
+prep:								# create data-directories on host, if not present
+	@mkdir -p /home/$(LOGIN)/data/wordpress
+	@mkdir -p /home/$(LOGIN)/data/mariadb
 
-# create or refresh images
-build:
+build:								# build or update images
 	$(DC) build
 
-# force complete rebuild
-rebuild:
-	$(DC) build --no-cache
-
-# build missing images, then start in forground (shows logs)
-up: prep
-	$(DC) up
-
-# same as 'up' but detached -> no logs
-up-d: prep
+up:									# start in detached mode
 	$(DC) up -d
 
-down:
+down:								# stop and remove containers and networks
 	$(DC) down
 
-# exec:
-# 	$(DC) exec
-
-# stop containers, data safe
-stop:
-	$(DC) stop
-
-# start stopped containers again
-start:
-	$(DC) start
-
-ps:
-	$(DC) ps
-
-# show all logs
-logs:
-	$(DC) logs
-
-# show nginx logs
-logs-n:
-	$(DC) logs nginx
-
-# show mariadb logs
-logs-m:
-	$(DC) logs mariadb
-
-# show wordpress logs
-logs-w:
-	$(DC) logs wordpress
-
-# show all images built by this project
-images:
-	$(DC) images
-
-# stop and remove containers, networks and volumes (only project data!)
-clean:
+clean:								# stop and remove containers, networks and volumes
 	$(DC) down -v
 
-# prune overview
-# docker system prune: removes unused data (stopped containers, unused networks, dangling images and build cache)
-# flags:
-# -a, --all: removes all unused images not just dangling ones
-# -f, --force: skip confirmation
-# --volumes: removes unused volumes
-prune:
-	docker system prune -af
+ps:									# show running containers
+	$(DC) ps
 
-# wipes all Docker resources on the machine (containers, images, volumes, networks)
-# "|| true" -> ensures the Makefile doesnt stop if rm fails (e.g. if the path doesnt exist)
-fclean: clean
-	@read -p "Are you sure? [y/N]: " confirm && \
+re: clean all
+
+.PHONY: all prep build up down clean ps re
+
+# DEVELOPMENT
+refresh: build up-d					# update images, then start in detached mode
+
+rebuild:							# rebuild all images from scratch
+	$(DC) build --no-cache
+
+up-d:								# start (with logs)
+	$(DC) up
+
+logs-n:								# show nginx logs
+	$(DC) logs nginx
+
+logs-m:								# show mariadb logs
+	$(DC) logs mariadb
+
+logs-w:								# show wordpress logs
+	$(DC) logs wordpress
+
+exec:								# eg. SERVICE=mariadb CMD="mysql -u root -p" -> access mysql as root
+	@if [ ! -z "$(SERVICE)" ] && [ ! -z "$(CMD)" ]; then \
+		$(DC) exec $(SERVICE) $(CMD); \
+	else \
+		echo "Syntax: [ make exec SERVICE=<service> CMD=<command> ]"; \
+	fi
+
+.PHONY: refresh rebuild up-d logs-n logs-m logs-w exec
+
+# OTHERS
+start:								# start containers (eg. after stop)
+	$(DC) start
+
+stop:								# stop containers (eg. for changing config, not images)
+	$(DC) stop
+
+logs:								# show all logs
+	$(DC) logs
+
+images:								# show all images
+	$(DC) images
+
+rmi:								# remove all project images
+	$(DC) rmi --all
+
+prune:								# remove unused data (stopped containers, networks, dangling images and cache)
+	docker system prune -af
+# 									  -a: removes dangling + unused images (=all)
+# 									  -f: skip confirmation
+# 									  --volumes: removes unused volumes
+
+fclean:								# wipe all Docker resources (images, containers, networks, volumes, data-dirs on host)
+	@read -p "This will remove all data, including directories on host. Are you sure? [y/N]: " confirm && \
     if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
-		@rm -rf /home/$(LOGIN)/data/wordpress /home/$(LOGIN)/data/mariadb || true; \
+		$(DC) down -v; \
+		sudo rm -rf /home/$(LOGIN)/data/wordpress /home/$(LOGIN)/data/mariadb || true; \
 		docker system prune -af --volumes; \
 	else \
 		echo "Cancelled"; \
 		exit 1; \
 	fi
 
-re: fclean all
-
-.PHONY: all prep build rebuild up up-d down start stop ps logs logs-n logs-m logs-w images clean prune fclean re
+.PHONY: start stop logs images rmi prune fclean

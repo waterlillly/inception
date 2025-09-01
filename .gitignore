@@ -1,48 +1,22 @@
-# Secrets (just files, keeps directory)
-secrets/*
 !secrets/.gitkeep
-*.secret
-*.key
-*.crt
-*.pem
-
-# Environment files with real credentials
-srcs/.env
+secrets/*
+!*.env.example
 *.env
-*.env.local
-*.env.production
-
-# User-specific data
 /home/*/data/
-
-# Docker volumes and build cache
 .docker/
 docker-compose.override.yml
-
-# Other files
 .vscode/
-inception.pdf
+*.pdf
 # *.md
-README.md
-.idea/
 *.swp
 *.swo
 *~
-
-# OS generated files
-.DS_Store
-.DS_Store?
+.DS_Store*
 ._*
 Thumbs.db
-
-# Logs
 *.log
-logs/
-
-# Temporary files
+logs/*
 *.tmp
 *.temp
-
-# Backup files
 *.bak
 *.backup

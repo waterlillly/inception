@@ -1,45 +1,24 @@
-# build -> building a custom image instead of pulling one with "image"
-# container_name -> use custom name for container
-# secrets -> manage sensitive data (e.g., passwords) separately from the code
-# ports -> map container ports to host ports
-# env_file -> specify environment variables in a file, instead of inline
-# volumes -> mount host paths or named volumes into the container at the specified path
-# depends_on -> specify dependencies between services to control startup order
-# restart -> (here:) always restart the container unless it is explicitly stopped
-# networks -> define custom networks for inter-container communication
-#             (by default all services inside a compose file are in the same network)
-#     -> driver: how containers connect to each other
-#           => bridge: default for standalone containers on a single host
-#               -> creates virtual internal network on host machine
-#               -> every container in that network gets private IP address from network
-#               -> NAT (Network Address Translation) is set up by docker so containers can reach internet through host
-
-# image: <image_name> without defining 'build' would pull <image_name> from Docker Hub
-# with 'build' it will build the image from the specified Dockerfile and will give the specified name
-# -> image name == service name (as the subject wants us to do)
 services:
   nginx:
-    image: nginx
-    build: ./requirements/nginx
-    # container_name: nginx
-    ports:
+    build: ./requirements/nginx		# build custom image instead of pulling from Docker Hub
+    container_name: nginx			# use custom name for container
+    ports:							# map container ports to host ports
       - "443:443"
-    env_file:
+    env_file:						# specify env-vars in a file (instead of inline)
       - ./.env
-    volumes:
+    volumes:						# mount host paths/named volumes into container at specified path
       - wordpress_data:/var/www/html
-    depends_on:
+    depends_on:						# specify dependencies between services to control startup order
       wordpress:
-        condition: service_healthy
-    restart: unless-stopped
-    networks:
-      - inception
+        condition: service_healthy	# wait for wordpress service to be healthy
+    restart: unless-stopped			# always restart the container unless it is explicitly stopped
+    networks:						# define custom networks for inter-container communication
+      - inception					#	(by default all services inside a compose file are in the same network)
 
   wordpress:
-    image: wordpress
     build: ./requirements/wordpress
-    # container_name: wordpress
-    secrets:
+    container_name: wordpress
+    secrets:						# manage sensitive data (e.g., passwords) separately from the code
       - db_user_password
       - wp_admin_password
       - wp_user_password
@@ -50,20 +29,19 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-    healthcheck:
-    # php-fpm8.2 -t -> tests if php-fpm is properly configured and running
-      test: ["CMD-SHELL", "php-fpm8.2 -t"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
+    healthcheck:					# check if service is healthy
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 9000 || exit 1"]
+                                    # scans port to check if php-fpm is listening (without actual data transfer)
+      interval: 30s					# run the test every 30sec
+      timeout: 20s					# fail if test takes longer than 20s to finish
+      retries: 3					# try 3 times before marking as unhealthy
     restart: unless-stopped
     networks:
       - inception
 
   mariadb:
-    image: mariadb
     build: ./requirements/mariadb
-    # container_name: mariadb
+    container_name: mariadb
     secrets:
       - db_user_password
       - db_root_password
@@ -72,11 +50,13 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     healthcheck:
-    # test -> runs a command inside the container to check if it's healthy
-    # mysqladmin (= client utility) "pings" the running database to check if it's up
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$(cat /run/secrets/db_root_password)"]
-      interval: 30s
-      timeout: 20s
+                                    # mysqladmin (= client utility) pings database to check if it's up
+                                    # -u -> specifies to connect as specific user (=root)
+                                    # -p -> password for user
+                                    # $$ -> escape $ in docker-compose
+      interval: 20s
+      timeout: 10s
       retries: 3
     restart: unless-stopped
     networks:
@@ -92,23 +72,13 @@ secrets:
   wp_user_password:
     file: ./../secrets/wp_user_password
 
-# Volumes to persist data and configuration outside of the container lifecycle
-# driver -> volume driver to use (default is local -> stores volume data on host)
-#           other options: nfs, azurefile, flocker, gcs -> used for shared storage (swarm) or external persistance
-# driver_opts -> specific options passed to the driver
-#               common for local driver:
-#                 type: none -> what filesystem/device type is used (none, nfs -> for remote shared storage, tmpfs -> in-memory, data only lives in RAM, fast but ephemeral storage)
-#                 o: bind -> bind-mount an existing path (rw/ro = read-write/read-only, uid=<uid>,gid=<gid> = set ownership)
-#                 device: <host_path> -> the actual path to mount
-
-# if the path exists and is writeable:
-volumes:
+volumes:							# define volumes to keep data persistent outside of container lifecycle
   wordpress_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/${LOGIN}/data/wordpress
+    driver: local                   # local is default => volume data gets stored on host machine
+    driver_opts:                    # specific options for the local driver
+      type: none                    # which filesystem/device type is used (eg.: nfs (remote shared storage), tmpfs (in-memory/ RAM))
+      o: bind                       # bind-mount an existing path (eg.: rw/ro = read-/write-only, uid=<uid>,gid=<gid> = set ownership))
+      device: /home/${LOGIN}/data/wordpress # <host_path> -> the actual path to mount (has to exist!)
   mariadb_data:
     driver: local
     driver_opts:
@@ -118,4 +88,8 @@ volumes:
 
 networks:
   inception:
-    driver: bridge
+    driver: bridge	                # how containers should connect to each other
+                                    # bridge: default for standalone containers on a single host
+                                    #  -> creates virtual internal network on host machine
+                                    #  -> every container gets private IP address from network
+                                    #  -> NAT (Network Address Translation) so container can reach internet through host

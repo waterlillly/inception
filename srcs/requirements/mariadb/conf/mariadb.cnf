@@ -1,0 +1,5 @@
+[mysqld]
+bind-address = 0.0.0.0    # allow wordpress container to connect (127.0.0.1 would block external connections)
+port = 3306               # standard mysql/mariadb port
+user = mysql              # run as user, not root
+skip-networking = false   # allow network connections (required for wordpress container)

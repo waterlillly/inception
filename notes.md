@@ -3,10 +3,10 @@
 - what's what - a dictionary for keywords
 - write down project flow (start-middle-end)
 - minimize everything
-- delete or do bonus
+
 - personalize wordpress -> make php website!
 <!-- - cheatsheet for adding secrets -->
-- cheatsheet for adding .env variables
+<!-- - cheatsheet for adding .env variables -->
 <!-- - delete secrets -->
 <!-- - rewrite Makefile -->
 <!-- - check penultimate Debian version -->
@@ -21,17 +21,24 @@
 <!-- - use healthcheck? -->
 <!-- - what is buildkit??? -->
 <!-- - change LOGIN back to lbaumeis -->
-- should .gitignore and .dockerignore be pushed to/ shown on github??
+<!-- - should .gitignore and .dockerignore be pushed to/ shown on github?? -->
 - uncomment .md in gitignore file for eval
 - delete stuff inside .gitkeep file
 - add .gitignore to .gitignore and .dockerignore to .dockerignore??
 - create .README (push to github but then add to .gitignore for eval!)
-- add exec
-- add theme to wordpress to enable comments
+<!-- - add exec -->
+<!-- - add theme to wordpress to enable comments -->
 - how to login to mariadb + verify its not empty
 <!-- - check if deleting data dir on host is actually valid! -->
 - install docker-compose-plugin (for docker compose)
 	-> sudo apt-get update && sudo apt-get install -y docker-compose-plugin
+- delete builtkit -> should be good with just using the newer docker compose version
+<!-- - took out security headers in nginx, read more about them before adding -->
+<!-- - DB_DATA_DIR -> is this even used? -->
+- how do i stop makefile from printing out the commands?
+- check if wordpress theme even gets used the way its inside now
+<!-- - do i need ::443 and 443 ? -->
+<!-- - change www.conf to wordpress.conf -->
 ___________________________________________________________________________________________________
 
 # QUESTIONS
@@ -240,7 +247,6 @@ ________________________________________________________________________________
 	# DATABASE (MARIADB)
 	DB_NAME=wordpress
 	DB_HOST=mariadb:3306
-	DB_DATA_DIR=/var/lib/mysql
 	DB_USER=internalconnectuser
 ___________________________________________________________________________________________________
 
@@ -275,8 +281,8 @@ ________________________________________________________________________________
 ## *docker-compose up [-d]*
 	This command starts all the services defined in your docker-compose.yml file. It creates the necessary containers, networks, and volumes if they don’t already exist. You can run it in the background by adding the -d option.
 
-## *docker-compose down*
-	Use this command to stop and remove all the containers, networks, and volumes that were created by docker-compose up. It’s a good way to clean up resources when you no longer need the application running.
+## *docker-compose down [-v]*
+	Use this command to stop and remove all the containers and networks that were created by docker-compose up. It’s a good way to clean up resources when you no longer need the application running. Add -v to also remove the volumes.
 
 ## *docker-compose ps*
 	This command lists all the containers associated with your Compose application, showing their current status and other helpful information. It’s great for monitoring which services are up and running.
@@ -287,8 +293,8 @@ ________________________________________________________________________________
 ## *docker-compose exec [db psql -U user -d mydb]*
 	With this command, you can run a command inside one of the running service containers. It’s particularly useful for debugging or interacting with your services directly.
 
-## *docker-compose build*
-	This command builds or rebuilds the images specified in your docker-compose.yml file. It’s handy when you’ve made changes to your Dockerfiles or want to update your images.
+## *docker-compose build [--no-cache]*
+	This command builds or rebuilds the images specified in your docker-compose.yml file. It’s handy when you’ve made changes to your Dockerfiles or want to update your images. Add --no-cache at the end to completely rebuild from scratch.
 
 ## *docker-compose pull*
 	Use this command to pull the latest images for your services from their respective registries. It ensures that you have the most current versions before starting your application.
@@ -424,3 +430,70 @@ ________________________________________________________________________________
 	service.
 	For the free choice service, the evaluated student has to give you a
 	simple explanation about how it works and why they think it is useful.
+
+___________________________________________________________________________________________________
+
+# WORDPRESS CUSTOMIZATION
+<!-- wp:group {"className":"is-style-default","style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|60","right":"var:preset|spacing|60"},"blockGap":"0"}},"backgroundColor":"base","layout":{"type":"flex","orientation":"vertical","justifyContent":"stretch","verticalAlignment":"center"}} -->
+<div class="wp-block-group is-style-default has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--60)"><!-- wp:template-part {"slug":"header","theme":"twentytwentyfive","area":"header"} /-->
+
+<!-- wp:query {"queryId":31,"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"metadata":{"categories":["posts"],"patternName":"core/fullwidth-posts-with-uppercase-titles","name":"Fullwidth posts with uppercase titles"},"align":"full","layout":{"type":"default"}} -->
+<div class="wp-block-query alignfull"><!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"0","right":"0","bottom":"0","left":"0"}}},"layout":{"type":"default"}} -->
+<div class="wp-block-group alignfull" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:post-template {"style":{"typography":{"textTransform":"none"}},"layout":{"type":"default"}} -->
+<!-- wp:group {"style":{"spacing":{"padding":{"top":"16px","right":"16px","bottom":"16px","left":"16px"}}},"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+<div class="wp-block-group" style="padding-top:16px;padding-right:16px;padding-bottom:16px;padding-left:16px"><!-- wp:post-terms {"term":"category","textAlign":"left"} /-->
+
+<!-- wp:post-date /--></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"is-style-default","style":{"spacing":{"padding":{"top":"16px","bottom":"var:preset|spacing|70","right":"16px","left":"16px"}}},"layout":{"type":"default"}} -->
+<div class="wp-block-group is-style-default" style="padding-top:16px;padding-right:16px;padding-bottom:var(--wp--preset--spacing--70);padding-left:16px"><!-- wp:heading -->
+<h2 class="wp-block-heading">blog post 001</h2>
+<!-- /wp:heading -->
+
+<!-- wp:quote {"textAlign":"left"} -->
+<blockquote class="wp-block-quote has-text-align-left"><!-- wp:paragraph -->
+<p>First blog entry woop woop</p>
+<!-- /wp:paragraph --></blockquote>
+<!-- /wp:quote --></div>
+<!-- /wp:group -->
+
+<!-- wp:comments -->
+<div class="wp-block-comments"><!-- wp:comments-title {"style":{"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}},"typography":{"fontSize":"1.4rem"}},"textColor":"contrast"} /-->
+
+<!-- wp:comment-template -->
+<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column {"width":"40px"} -->
+<div class="wp-block-column" style="flex-basis:40px"><!-- wp:avatar {"size":39,"style":{"border":{"radius":"20px"}}} /--></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:comment-author-name {"fontSize":"small"} /-->
+
+<!-- wp:group {"style":{"spacing":{"margin":{"top":"0px","bottom":"0px"}}},"layout":{"type":"flex"}} -->
+<div class="wp-block-group" style="margin-top:0px;margin-bottom:0px"><!-- wp:comment-date {"fontSize":"small"} /-->
+
+<!-- wp:comment-edit-link {"fontSize":"small"} /--></div>
+<!-- /wp:group -->
+
+<!-- wp:comment-content /-->
+
+<!-- wp:comment-reply-link {"fontSize":"small"} /--></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->
+<!-- /wp:comment-template -->
+
+<!-- wp:comments-pagination {"layout":{"type":"flex","justifyContent":"space-between"}} -->
+<!-- wp:comments-pagination-previous {"style":{"typography":{"fontSize":"1.1rem"}}} /-->
+
+<!-- wp:comments-pagination-next {"style":{"typography":{"fontSize":"1.1rem"}}} /-->
+<!-- /wp:comments-pagination -->
+
+<!-- wp:post-comments-form {"style":{"spacing":{"padding":{"right":"var:preset|spacing|30","left":"var:preset|spacing|30"}}}} /--></div>
+<!-- /wp:comments -->
+<!-- /wp:post-template --></div>
+<!-- /wp:group --></div>
+<!-- /wp:query -->
+
+<!-- wp:template-part {"slug":"footer","theme":"twentytwentyfive"} /--></div>
+<!-- /wp:group -->
