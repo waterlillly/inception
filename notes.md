@@ -2,7 +2,7 @@
 - checklist for eval/pushing
 - what's what - a dictionary for keywords
 - write down project flow (start-middle-end)
-- minimize everything
+<!-- - minimize everything -->
 
 - personalize wordpress -> make php website!
 <!-- - cheatsheet for adding secrets -->
@@ -30,19 +30,14 @@
 <!-- - add theme to wordpress to enable comments -->
 - how to login to mariadb + verify its not empty
 <!-- - check if deleting data dir on host is actually valid! -->
-- install docker-compose-plugin (for docker compose)
-	-> sudo apt-get update && sudo apt-get install -y docker-compose-plugin
+
 - delete builtkit -> should be good with just using the newer docker compose version
 <!-- - took out security headers in nginx, read more about them before adding -->
 <!-- - DB_DATA_DIR -> is this even used? -->
 - how do i stop makefile from printing out the commands?
-- check if wordpress theme even gets used the way its inside now
+<!-- - check if wordpress theme even gets used the way its inside now -->
 <!-- - do i need ::443 and 443 ? -->
 <!-- - change www.conf to wordpress.conf -->
-___________________________________________________________________________________________________
-
-# QUESTIONS
-1. allowed to use secrets or only .env?
 ___________________________________________________________________________________________________
 
 # DICTIONARY

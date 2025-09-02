@@ -68,7 +68,6 @@ if ! wp core is-installed --allow-root 2>/dev/null ; then
 	create_config
 	install_wordpress
 	create_user
-	wp theme install creative-minimalist --activate --allow-root
 fi
 
 # Start PHP-FPM (by default php-fpm daemonizes/runs in background)
