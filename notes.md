@@ -359,10 +359,10 @@ ________________________________________________________________________________
 	TODO: Before starting the evaluation, run this command in the terminal:
 	"docker stop $(docker ps -qa); docker rm $(docker ps -qa); docker rmi -f $(docker images -qa); docker volume rm $(docker volume ls -q); docker network rm $(docker network ls -q) 2>/dev/null"
 	- Read the docker-compose.yml file. There musn't be 'network: host' in it or 'links:'. Otherwise, the evaluation ends now.
-	TODO: Read the docker-compose.yml file. There must be 'network(s)' in it. Otherwise, the evaluation ends now.
+	- Read the docker-compose.yml file. There must be 'network(s)' in it. Otherwise, the evaluation ends now.
 	- Examine the Makefile and all the scripts in which Docker is used. There musn't be '--link' in any of them. Otherwise, the evaluation ends now.
 	- Examine the Dockerfiles. If you see 'tail -f' or any command run in background in any of them in the ENTRYPOINT section, the evaluation ends now. Same thing if 'bash' or 'sh' are used but not for running a script (e.g, 'nginx & bash' or 'bash').
-	TODO: If the entrypoint is a script (e.g., ENTRYPOINT ["sh", "my_entrypoint.sh"], ENTRYPOINT ["bash", "my_entrypoint.sh"]), ensure it runs no program
+	If the entrypoint is a script (e.g., ENTRYPOINT ["sh", "my_entrypoint.sh"], ENTRYPOINT ["bash", "my_entrypoint.sh"]), ensure it runs no program
 	in background (e.g, 'nginx & bash').
 	- Examine all the scripts in the repository. Ensure none of them runs an infinite loop.
 	- The following are a few examples of prohibited commands: 'sleep infinity', 'tail -f /dev/null', 'tail -f /dev/random'
@@ -394,14 +394,14 @@ ________________________________________________________________________________
 	Indeed, it is forbidden to use ready-made ones or to use services such as DockerHub.
 	- Ensure that every container is built from the penultimate stable version of Alpine/Debian.
 	If a Dockerfile does not start with 'FROM alpine:X.X.X' or 'FROM debian:XXXXX', or any other local image, the evaluation process ends now.
-	TODO: The Docker images must have the same name as their corresponding service. Otherwise, the evaluation process ends now.
+	The Docker images must have the same name as their corresponding service. Otherwise, the evaluation process ends now.
 	- Ensure that the Makefile has set up all the services via docker compose. This means that the containers must have been built using docker compose and that no crash happened.
 	Otherwise, the evaluation process ends.
 
 ## Docker Network
-	TODO: Ensure that docker-network is used by checking the docker-compose.yml file.
+	Ensure that docker-network is used by checking the docker-compose.yml file.
 	- Then run the 'docker network ls' command to verify that a network is visible.
-	TODO: The evaluated student has to give you a simple explanation of docker-network.
+	The evaluated student has to give you a simple explanation of docker-network.
 	If any of the above points is not correct, the evaluation process ends now.
 
 ## NGINX with SSL/TLS
@@ -420,7 +420,7 @@ ________________________________________________________________________________
 	- Ensure that there is a Volume.
 	To do so: Run the command 'docker volume ls' then 'docker volume inspect <volume name>'.
 	Verify that the result in the standard output contains the path '/home/login/data/', where login is the login of the evaluated student.
-	TODO: Ensure that you can add a comment using the available WordPress user.
+	Ensure that you can add a comment using the available WordPress user.
 	- Sign in with the administrator account to access the Administration dashboard. The Admin username must not include 'admin' or 'Admin' (e.g., admin, administrator, Admin-login, admin-123, and so forth).
 	- From the Administration dashboard, edit a page. Verify on the website that the page has been updated.
 	If any of the above points is not correct, the evaluation process ends now.
@@ -445,117 +445,50 @@ ________________________________________________________________________________
 
 ___________________________________________________________________________________________________
 
-# WORDPRESS CUSTOMIZATION
-<!-- wp:group {"className":"is-style-default","style":{"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"var:preset|spacing|60","right":"var:preset|spacing|60"},"blockGap":"0"}},"backgroundColor":"base","layout":{"type":"flex","orientation":"vertical","justifyContent":"stretch","verticalAlignment":"center"}} -->
-<div class="wp-block-group is-style-default has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--60)"><!-- wp:template-part {"slug":"header","theme":"twentytwentyfive","area":"header"} /-->
-
-<!-- wp:query {"queryId":31,"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"metadata":{"categories":["posts"],"patternName":"core/fullwidth-posts-with-uppercase-titles","name":"Fullwidth posts with uppercase titles"},"align":"full","layout":{"type":"default"}} -->
-<div class="wp-block-query alignfull"><!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"0","right":"0","bottom":"0","left":"0"}}},"layout":{"type":"default"}} -->
-<div class="wp-block-group alignfull" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:post-template {"style":{"typography":{"textTransform":"none"}},"layout":{"type":"default"}} -->
-<!-- wp:group {"style":{"spacing":{"padding":{"top":"16px","right":"16px","bottom":"16px","left":"16px"}}},"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
-<div class="wp-block-group" style="padding-top:16px;padding-right:16px;padding-bottom:16px;padding-left:16px"><!-- wp:post-terms {"term":"category","textAlign":"left"} /-->
-
-<!-- wp:post-date /--></div>
-<!-- /wp:group -->
-
-<!-- wp:group {"className":"is-style-default","style":{"spacing":{"padding":{"top":"16px","bottom":"var:preset|spacing|70","right":"16px","left":"16px"}}},"layout":{"type":"default"}} -->
-<div class="wp-block-group is-style-default" style="padding-top:16px;padding-right:16px;padding-bottom:var(--wp--preset--spacing--70);padding-left:16px"><!-- wp:heading -->
-<h2 class="wp-block-heading">blog post 001</h2>
-<!-- /wp:heading -->
-
-<!-- wp:quote {"textAlign":"left"} -->
-<blockquote class="wp-block-quote has-text-align-left"><!-- wp:paragraph -->
-<p>First blog entry woop woop</p>
-<!-- /wp:paragraph --></blockquote>
-<!-- /wp:quote --></div>
-<!-- /wp:group -->
-
-<!-- wp:comments -->
-<div class="wp-block-comments"><!-- wp:comments-title {"style":{"elements":{"link":{"color":{"text":"var:preset|color|contrast"}}},"typography":{"fontSize":"1.4rem"}},"textColor":"contrast"} /-->
-
-<!-- wp:comment-template -->
-<!-- wp:columns -->
-<div class="wp-block-columns"><!-- wp:column {"width":"40px"} -->
-<div class="wp-block-column" style="flex-basis:40px"><!-- wp:avatar {"size":39,"style":{"border":{"radius":"20px"}}} /--></div>
-<!-- /wp:column -->
-
-<!-- wp:column -->
-<div class="wp-block-column"><!-- wp:comment-author-name {"fontSize":"small"} /-->
-
-<!-- wp:group {"style":{"spacing":{"margin":{"top":"0px","bottom":"0px"}}},"layout":{"type":"flex"}} -->
-<div class="wp-block-group" style="margin-top:0px;margin-bottom:0px"><!-- wp:comment-date {"fontSize":"small"} /-->
-
-<!-- wp:comment-edit-link {"fontSize":"small"} /--></div>
-<!-- /wp:group -->
-
-<!-- wp:comment-content /-->
-
-<!-- wp:comment-reply-link {"fontSize":"small"} /--></div>
-<!-- /wp:column --></div>
-<!-- /wp:columns -->
-<!-- /wp:comment-template -->
-
-<!-- wp:comments-pagination {"layout":{"type":"flex","justifyContent":"space-between"}} -->
-<!-- wp:comments-pagination-previous {"style":{"typography":{"fontSize":"1.1rem"}}} /-->
-
-<!-- wp:comments-pagination-next {"style":{"typography":{"fontSize":"1.1rem"}}} /-->
-<!-- /wp:comments-pagination -->
-
-<!-- wp:post-comments-form {"style":{"spacing":{"padding":{"right":"var:preset|spacing|30","left":"var:preset|spacing|30"}}}} /--></div>
-<!-- /wp:comments -->
-<!-- /wp:post-template --></div>
-<!-- /wp:group --></div>
-<!-- /wp:query -->
-
-<!-- wp:template-part {"slug":"footer","theme":"twentytwentyfive"} /--></div>
-<!-- /wp:group -->
-
 # EVAL QUESTIONS
-How Docker and docker compose work
-Docker: Think of it as a tool that lets you run programs inside little boxes called containers. Each container has everything it needs (like system libraries, configs) without messing up your computer.
-Docker Compose: It’s like a manager that tells Docker how to run multiple containers together. Instead of starting containers one by one with long commands, you just write a docker-compose.yml file and say “run them all together.”
+## How Docker and docker compose work
+	Docker: Think of it as a tool that lets you run programs inside little boxes called containers. Each container has everything it needs (like system libraries, configs) without messing up your computer.
+	Docker Compose: It’s like a manager that tells Docker how to run multiple containers together. Instead of starting containers one by one with long commands, you just write a docker-compose.yml file and say “run them all together.”
 
-The difference between a Docker image used with docker compose and without docker compose
-Without Docker Compose: You run a single image/container manually with docker run. Example: run just MySQL.
-With Docker Compose: You can describe several images (nginx, wordpress, mariadb) and how they should talk to each other, then start everything at once with docker compose up.
-The image itself is the same — the difference is in how you orchestrate it.
+## The difference between a Docker image used with docker compose and without docker compose
+	Without Docker Compose: You run a single image/container manually with docker run. Example: run just MySQL.
+	With Docker Compose: You can describe several images (nginx, wordpress, mariadb) and how they should talk to each other, then start everything at once with docker compose up.
+	The image itself is the same — the difference is in how you orchestrate it.
 
-The benefit of Docker compared to VMs
-A Virtual Machine (VM) is like running a whole extra computer inside your computer — it includes its own operating system. Heavy, slow to start, uses a lot of memory.
-Docker doesn’t run a whole OS for each app. It just shares the host’s OS kernel, so it’s lighter, faster, and you can run many containers easily on the same machine.
+## The benefit of Docker compared to VMs
+	A Virtual Machine (VM) is like running a whole extra computer inside your computer — it includes its own operating system. Heavy, slow to start, uses a lot of memory.
+	Docker doesn’t run a whole OS for each app. It just shares the host’s OS kernel, so it’s lighter, faster, and you can run many containers easily on the same machine.
 
-The pertinence of the directory structure required for this project (an example is provided in the subject's PDF file).
-Why it matters: The structure is there to keep things organized and reproducible.
-- srcs/ → source files for your services.
-- Inside srcs/nginx/, srcs/wordpress/, srcs/mariadb/ → each has its Dockerfile (build instructions), config files (.conf), and scripts (.sh) for setup.
-- docker-compose.yml → blueprint that ties all containers together.
-- .env → environment variables like usernames/passwords, so you don’t hardcode them.
-- secrets/ → secure files (like SSL certs, DB passwords).
-- Makefile → shortcuts to run commands (make up, make clean, etc).
-This layout makes it clear what belongs to which service and ensures everything works when others run your project.
+## The pertinence of the directory structure required for this project
+	Why it matters: The structure is there to keep things organized and reproducible.
+	- srcs/ → source files for your services.
+	- Inside srcs/nginx/, srcs/wordpress/, srcs/mariadb/ → each has its Dockerfile (build instructions), config files (.conf), and scripts (.sh) for setup.
+	- docker-compose.yml → blueprint that ties all containers together.
+	- .env → environment variables like usernames/passwords, so you don’t hardcode them.
+	- secrets/ → secure files (like SSL certs, DB passwords).
+	- Makefile → shortcuts to run commands (make up, make clean, etc).
+	This layout makes it clear what belongs to which service and ensures everything works when others run your project.
 
-The docker-network.
-A Docker network is like a virtual LAN (local network) inside Docker.
-All containers connected to the same Docker network can talk to each other by their service name (e.g. wordpress can reach mariadb just by using mariadb:3306).
-From the outside world, only services you explicitly expose (like nginx on port 443) are reachable. TODO: expose mariadb port wrong?
+## The docker-network.
+	A Docker network is like a virtual LAN (local network) inside Docker.
+	All containers connected to the same Docker network can talk to each other by their service name (e.g. wordpress can reach mariadb just by using mariadb:3306).
+	From the outside world, only services you explicitly expose (like nginx on port 443) are reachable. TODO: expose mariadb port wrong?
 
-How to login into the mariadb database.
-If mariadb runs as a container, you can get inside with: docker exec -it mariadb-container-name mysql -u username -p
-Then enter the password.
-Or connect from another container (like wordpress) using the service name mariadb, port 3306, and the credentials from your .env.
+## How to login into the mariadb database.
+	If mariadb runs as a container, you can get inside with: docker exec -it mariadb-container-name mysql -u username -p
+	Then enter the password.
+	Or connect from another container (like wordpress) using the service name mariadb, port 3306, and the credentials from your .env.
 
-PID1 and docker daemons
-Docker daemon (dockerd): the background process on your machine that manages containers. It listens for commands (docker run, docker compose up, etc).
-PID 1 in containers: Inside a container, the very first process started becomes process ID 1. It’s special because if PID1 crashes, the whole container stops. That’s why you sometimes use special tools like tini to manage processes properly inside containers.
+## PID1 and docker daemons
+	Docker daemon (dockerd): the background process on your machine that manages containers. It listens for commands (docker run, docker compose up, etc).
+	PID 1 in containers: Inside a container, the very first process started becomes process ID 1. It’s special because if PID1 crashes, the whole container stops. That’s why you sometimes use special tools like tini to manage processes properly inside containers.
 
-Nginx, Wordpress and Mariadb
-Nginx: A web server. Here it serves static files and acts as a reverse proxy (handling HTTPS and forwarding traffic to WordPress).
-WordPress: The PHP-based content management system. Runs your website/blog.
-MariaDB: A database server (like MySQL). WordPress stores all its content (posts, users, settings) inside this database.
+## Nginx, Wordpress and Mariadb
+	Nginx: A web server. Here it serves static files and acts as a reverse proxy (handling HTTPS and forwarding traffic to WordPress).
+	WordPress: The PHP-based content management system. Runs your website/blog.
+	MariaDB: A database server (like MySQL). WordPress stores all its content (posts, users, settings) inside this database.
 
-Browser → Nginx (SSL, web traffic) → WordPress (PHP code) → MariaDB (data).
-
-
-Browser sends HTTPS requests to Nginx.
-Nginx forwards PHP requests to WordPress.
-WordPress communicates with MariaDB using SQL queries.
+	Browser → Nginx (SSL, web traffic) → WordPress (PHP code) → MariaDB (data).
+	Browser sends HTTPS requests to Nginx.
+	Nginx forwards PHP requests to WordPress.
+	WordPress communicates with MariaDB using SQL queries.
