@@ -509,3 +509,53 @@ ________________________________________________________________________________
 
 <!-- wp:template-part {"slug":"footer","theme":"twentytwentyfive"} /--></div>
 <!-- /wp:group -->
+
+# EVAL QUESTIONS
+How Docker and docker compose work
+Docker: Think of it as a tool that lets you run programs inside little boxes called containers. Each container has everything it needs (like system libraries, configs) without messing up your computer.
+Docker Compose: It’s like a manager that tells Docker how to run multiple containers together. Instead of starting containers one by one with long commands, you just write a docker-compose.yml file and say “run them all together.”
+
+The difference between a Docker image used with docker compose and without docker compose
+Without Docker Compose: You run a single image/container manually with docker run. Example: run just MySQL.
+With Docker Compose: You can describe several images (nginx, wordpress, mariadb) and how they should talk to each other, then start everything at once with docker compose up.
+The image itself is the same — the difference is in how you orchestrate it.
+
+The benefit of Docker compared to VMs
+A Virtual Machine (VM) is like running a whole extra computer inside your computer — it includes its own operating system. Heavy, slow to start, uses a lot of memory.
+Docker doesn’t run a whole OS for each app. It just shares the host’s OS kernel, so it’s lighter, faster, and you can run many containers easily on the same machine.
+
+The pertinence of the directory structure required for this project (an example is provided in the subject's PDF file).
+Why it matters: The structure is there to keep things organized and reproducible.
+- srcs/ → source files for your services.
+- Inside srcs/nginx/, srcs/wordpress/, srcs/mariadb/ → each has its Dockerfile (build instructions), config files (.conf), and scripts (.sh) for setup.
+- docker-compose.yml → blueprint that ties all containers together.
+- .env → environment variables like usernames/passwords, so you don’t hardcode them.
+- secrets/ → secure files (like SSL certs, DB passwords).
+- Makefile → shortcuts to run commands (make up, make clean, etc).
+This layout makes it clear what belongs to which service and ensures everything works when others run your project.
+
+The docker-network.
+A Docker network is like a virtual LAN (local network) inside Docker.
+All containers connected to the same Docker network can talk to each other by their service name (e.g. wordpress can reach mariadb just by using mariadb:3306).
+From the outside world, only services you explicitly expose (like nginx on port 443) are reachable. TODO: expose mariadb port wrong?
+
+How to login into the mariadb database.
+If mariadb runs as a container, you can get inside with: docker exec -it mariadb-container-name mysql -u username -p
+Then enter the password.
+Or connect from another container (like wordpress) using the service name mariadb, port 3306, and the credentials from your .env.
+
+PID1 and docker daemons
+Docker daemon (dockerd): the background process on your machine that manages containers. It listens for commands (docker run, docker compose up, etc).
+PID 1 in containers: Inside a container, the very first process started becomes process ID 1. It’s special because if PID1 crashes, the whole container stops. That’s why you sometimes use special tools like tini to manage processes properly inside containers.
+
+Nginx, Wordpress and Mariadb
+Nginx: A web server. Here it serves static files and acts as a reverse proxy (handling HTTPS and forwarding traffic to WordPress).
+WordPress: The PHP-based content management system. Runs your website/blog.
+MariaDB: A database server (like MySQL). WordPress stores all its content (posts, users, settings) inside this database.
+
+Browser → Nginx (SSL, web traffic) → WordPress (PHP code) → MariaDB (data).
+
+
+Browser sends HTTPS requests to Nginx.
+Nginx forwards PHP requests to WordPress.
+WordPress communicates with MariaDB using SQL queries.
