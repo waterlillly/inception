@@ -3,8 +3,6 @@
 *.md
 .vscode/
 *.log
+node_modules/
 *.tmp
-
-# etc
-.DS_Store
 Thumbs.db

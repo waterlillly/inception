@@ -1,24 +1,24 @@
 services:
   nginx:
-    build: ./requirements/nginx		          # build custom image instead of pulling from Docker Hub
-    container_name: nginx			              # use custom name for container
-    ports:							                    # map container ports to host ports
+    build: ./requirements/nginx		        # build custom image instead of pulling from Docker Hub
+    container_name: nginx			        # use custom name for container
+    ports:							        # map container ports to host ports
       - "443:443"
-    env_file:						                    # specify env-vars in a file (instead of inline)
+    env_file:						        # specify env-vars in a file (instead of inline)
       - ./.env
-    volumes:						                    # mount host paths/named volumes into container at specified path
+    volumes:						        # mount host paths/named volumes into container at specified path
       - wordpress_data:/var/www/html
-    depends_on:						                  # specify dependencies between services to control startup order
+    depends_on:						        # specify dependencies between services to control startup order
       wordpress:
         condition: service_healthy	        # wait for wordpress service to be healthy
-    restart: unless-stopped			            # always restart the container unless it is explicitly stopped
-    networks:						                    # define custom networks for inter-container communication
-      - inception					                  #	(by default all services inside a compose file are in the same network)
+    restart: unless-stopped			        # always restart the container unless it is explicitly stopped
+    networks:						        # define custom networks for inter-container communication
+      - inception					        #	(by default all services inside a compose file are in the same network)
 
   wordpress:
     build: ./requirements/wordpress
     container_name: wordpress
-    secrets:						                    # manage sensitive data (e.g., passwords) separately from the code
+    secrets:						        # manage sensitive data (e.g., passwords) separately from the code
       - db_user_password
       - wp_admin_password
       - wp_user_password
@@ -29,12 +29,12 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-    healthcheck:					                  # check if service is healthy
+    healthcheck:					        # check if service is healthy
       test: ["CMD-SHELL", "nc -z 127.0.0.1 9000 || exit 1"]
                                             # scans port to check if php-fpm is listening (without actual data transfer)
-      interval: 30s					                # run the test every 30sec
-      timeout: 20s					                # fail if test takes longer than 20s to finish
-      retries: 3					                  # try 3 times before marking as unhealthy
+      interval: 30s					        # run the test every 30sec
+      timeout: 20s					        # fail if test takes longer than 20s to finish
+      retries: 3					        # try 3 times before marking as unhealthy
     restart: unless-stopped
     networks:
       - inception
@@ -72,7 +72,7 @@ secrets:
   wp_user_password:
     file: ./../secrets/wp_user_password
 
-volumes:							                      # define volumes to keep data persistent outside of container lifecycle
+volumes:							        # define volumes to keep data persistent outside of container lifecycle
   wordpress_data:
     driver: local                           # local is default => volume data gets stored on host machine
     driver_opts:                            # specific options for the local driver

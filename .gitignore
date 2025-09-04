@@ -1,21 +1,21 @@
-!secrets/.gitkeep
 secrets/*
-!*.env.example
-*.env
+.env
 /home/*/data/
 .docker/
 docker-compose.override.yml
 .vscode/
 *.pdf
-# *.md
+.idea/
 *.swp
 *.swo
 *~
 .DS_Store*
-._*
 Thumbs.db
 *.log
 logs/*
+node_modules/
+dist/
+build/
 *.tmp
 *.temp
 *.bak
