@@ -1,6 +1,6 @@
 FROM debian:bookworm
 
-LABEL author=$(LOGIN)
+# LABEL author=
 
 # side note: php8.2-fpm = package name, php-fpm8.2 = service/binary name
 RUN apt-get update \

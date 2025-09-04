@@ -1,6 +1,6 @@
 FROM debian:bookworm
 
-LABEL author=$(LOGIN)
+# LABEL author=
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
