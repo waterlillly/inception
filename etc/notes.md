@@ -22,22 +22,13 @@
 <!-- - what is buildkit??? -->
 <!-- - change LOGIN back to lbaumeis -->
 <!-- - should .gitignore and .dockerignore be pushed to/ shown on github?? -->
-- uncomment .md in gitignore file for eval
-- delete stuff inside .gitkeep file
-- add .gitignore to .gitignore and .dockerignore to .dockerignore??
+<!-- - delete stuff inside .gitkeep file -->
 - create .README (push to github but then add to .gitignore for eval!)
 <!-- - add exec -->
 <!-- - add theme to wordpress to enable comments -->
-- how to login to mariadb + verify its not empty
+<!-- - how to login to mariadb + verify its not empty -->
 <!-- - check if deleting data dir on host is actually valid! -->
-
-- delete builtkit -> should be good with just using the newer docker compose version
-<!-- - took out security headers in nginx, read more about them before adding -->
-<!-- - DB_DATA_DIR -> is this even used? -->
-- how do i stop makefile from printing out the commands?
 <!-- - check if wordpress theme even gets used the way its inside now -->
-<!-- - do i need ::443 and 443 ? -->
-<!-- - change www.conf to wordpress.conf -->
 ___________________________________________________________________________________________________
 
 # DICTIONARY
@@ -59,7 +50,7 @@ ________________________________________________________________________________
 
 # FIRST TIME AWAY FROM HOME
 - create secrets (db_root_password, db_user_password, wp_admin_password, wp_user_password)
-- substitute .env.example with own .env () + create wordflow/cheatsheet for it
+- substitute .env.example with own .env ()
 - add .gitignore
 - add .dockerignore
 - setup VM
@@ -86,10 +77,6 @@ ________________________________________________________________________________
 			file: ./../secrets/my_password.txt
 		-> Docker looks for the file path and then creates the secret
 		-> managed by Docker but tied to this compose project specifically, can't reuse outside
-___________________________________________________________________________________________________
-
-## CHEATSHEET ENV VARIABLES
-TODO: todo!
 ___________________________________________________________________________________________________
 
 ## .GITIGNORE
@@ -200,25 +187,6 @@ ________________________________________________________________________________
 	- give wordpress folder the rights to be accessed by nginx and wordpress (both use the www-data user)
 		sudo chown -R www-data:www-data /home/lbaumeis/data/wordpress
 		sudo chmod -R 755 /home/lbaumeis/data/wordpress
-
-	- permanently enable buildkit:
-		echo 'export DOCKER_BUILDKIT=1' >> ~/.bashrc
-		echo 'export COMPOSE_DOCKER_CLI_BUILD=1' >> ~/.bashrc
-		export DOCKER_BUILDKIT=1
-		export COMPOSE_DOCKER_CLI_BUILD=1
-
-		sudo apt-get update
-		sudo apt-get install docker-buildx-plugin
-
-		in /etc/docker/daemon.json:
-		{
-			"features": {
-				"buildkit": true
-			}
-		}
-
-		then restart docker:
-		sudo systemvtl restart docker
 
 ___________________________________________________________________________________________________
 
